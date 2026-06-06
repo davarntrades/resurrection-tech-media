@@ -1,0 +1,23 @@
+# dependencies
+node_modules/
+
+# remotion build output
+build/
+.remotion/
+
+# rendered videos — keep the folder, ignore the renders
+out/*
+!out/.gitkeep
+
+# logs / os
+*.log
+npm-debug.log*
+.DS_Store
+
+# editor
+.vscode/
+.idea/
+
+# env
+.env
+.env.local
