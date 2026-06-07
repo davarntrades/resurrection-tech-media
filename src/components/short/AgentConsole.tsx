@@ -74,11 +74,9 @@ export const AgentConsole: React.FC = () => {
   const typed = AGENT_RECORD.endpoint.slice(0, chars);
   const caret = Math.floor(frame / 8) % 2 === 0 ? '▋' : ' ';
 
-  // scanning sweep over the record
-  const sweep = interpolate(frame, [34, 78], [0, 1], {
-    extrapolateLeft: 'clamp',
-    extrapolateRight: 'clamp',
-  });
+  // scanning sweep over the record — loops so the read stays alive for the beat
+  const sweepRaw = (frame - 34) / 46;
+  const sweep = sweepRaw <= 0 ? -1 : sweepRaw % 1;
 
   return (
     <ConsoleCard title="AGENT · autonomous" status="READING">
@@ -110,11 +108,11 @@ export const AgentConsole: React.FC = () => {
             position: 'absolute',
             left: -10,
             right: -10,
-            top: `${sweep * 100}%`,
+            top: `${Math.max(0, sweep) * 100}%`,
             height: 64,
             transform: 'translateY(-32px)',
             background: `linear-gradient(180deg, transparent, ${COLORS.accentGlow}, transparent)`,
-            opacity: sweep > 0 && sweep < 1 ? 0.9 : 0,
+            opacity: sweep <= 0 ? 0 : Math.sin(Math.PI * sweep) * 0.85,
             borderRadius: 12,
           }}
         />

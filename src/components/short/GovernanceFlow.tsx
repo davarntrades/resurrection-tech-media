@@ -83,14 +83,21 @@ export const GovernanceFlow: React.FC<{phase: 'intervene' | 'block'}> = ({
   const barX = interpolate(slide, [0, 1], [-900, 0]);
 
   const blocked = phase === 'block';
+  // Block beat: evaluate first, then the verdict lands at blockAt.
+  const blockAt = 26;
+  const violated = blocked && frame >= blockAt;
   const stamp = blocked
-    ? spring({frame: frame - 4, fps, config: {damping: 9, mass: 0.6, stiffness: 180}})
+    ? spring({
+        frame: frame - blockAt,
+        fps,
+        config: {damping: 9, mass: 0.6, stiffness: 180},
+      })
     : 0;
-  const stampScale = interpolate(stamp, [0, 1], [1.7, 1]);
-  const evalSweep = interpolate(frame, [16, 60], [0, 1], {
-    extrapolateLeft: 'clamp',
-    extrapolateRight: 'clamp',
-  });
+  const pulse = 1 + 0.02 * Math.sin(frame / 6);
+  const stampScale = interpolate(stamp, [0, 1], [1.7, 1]) * pulse;
+  // looping scan highlight so the "evaluating" state stays alive across the beat
+  const sweepRaw = (frame - 16) / 44;
+  const evalSweep = sweepRaw <= 0 ? 0 : sweepRaw % 1;
 
   return (
     <div
@@ -109,7 +116,7 @@ export const GovernanceFlow: React.FC<{phase: 'intervene' | 'block'}> = ({
         style={{
           width: 4,
           height: 40,
-          background: blocked ? COLORS.omega : COLORS.line2,
+          background: violated ? COLORS.omega : COLORS.line2,
         }}
       />
 
@@ -143,10 +150,10 @@ export const GovernanceFlow: React.FC<{phase: 'intervene' | 'block'}> = ({
             RUNTIME GOVERNANCE
           </div>
           <div style={{fontFamily: FONTS.mono, fontSize: 24, color: '#eef'}}>
-            {blocked ? 'policy RT-014 · violated' : 'evaluating · policy RT-014'}
+            {violated ? 'policy RT-014 · violated' : 'evaluating · policy RT-014'}
           </div>
         </div>
-        {!blocked ? (
+        {!violated ? (
           <div
             style={{
               position: 'absolute',
@@ -166,15 +173,15 @@ export const GovernanceFlow: React.FC<{phase: 'intervene' | 'block'}> = ({
         style={{
           width: 4,
           height: 40,
-          background: blocked ? COLORS.omega : COLORS.line2,
+          background: violated ? COLORS.omega : COLORS.line2,
         }}
       />
 
       <Node
         label="EXECUTION"
-        sub={blocked ? 'transfer.execute()' : 'pending…'}
-        color={blocked ? COLORS.omega : COLORS.line2}
-        struck={blocked}
+        sub={violated ? 'transfer.execute()' : 'pending…'}
+        color={violated ? COLORS.omega : COLORS.line2}
+        struck={violated}
       />
 
       {/* BLOCK stamp */}

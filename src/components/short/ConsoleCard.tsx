@@ -28,13 +28,38 @@ export const ConsoleCard: React.FC<{
     <div
       style={{
         width,
+        position: 'relative',
         borderRadius: 28,
-        background: `linear-gradient(180deg, ${COLORS.panel2}, ${COLORS.panel})`,
+        background: `linear-gradient(180deg, ${COLORS.panel2}ee, ${COLORS.panel}f2)`,
+        backdropFilter: 'blur(14px)',
+        WebkitBackdropFilter: 'blur(14px)',
         border: `1px solid ${COLORS.line2}`,
-        boxShadow: '0 40px 120px rgba(0,0,0,0.55)',
+        boxShadow: `0 50px 130px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.08)`,
         overflow: 'hidden',
       }}
     >
+      {/* top sheen */}
+      <div
+        style={{
+          position: 'absolute',
+          inset: 0,
+          background:
+            'linear-gradient(180deg, rgba(255,255,255,0.06), transparent 22%)',
+          pointerEvents: 'none',
+        }}
+      />
+      {/* accent hairline along the top edge */}
+      <div
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: 2,
+          background: `linear-gradient(90deg, transparent, ${accent}, transparent)`,
+          opacity: 0.7,
+        }}
+      />
       {/* header */}
       <div
         style={{

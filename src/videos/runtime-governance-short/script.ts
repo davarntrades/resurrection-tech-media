@@ -44,7 +44,7 @@ const w = (
 export const SHORT_SCENES: ShortScene[] = [
   {
     id: 'hook',
-    frames: 66,
+    frames: 120,
     vo: 'Most AI safety tools react after the damage is done.',
     caption: [
       w('Most'),
@@ -61,7 +61,7 @@ export const SHORT_SCENES: ShortScene[] = [
   },
   {
     id: 'reads',
-    frames: 96,
+    frames: 120,
     vo: "An autonomous agent reads a customer's account.",
     caption: [
       w('An'),
@@ -75,7 +75,7 @@ export const SHORT_SCENES: ShortScene[] = [
   },
   {
     id: 'prepares',
-    frames: 96,
+    frames: 120,
     vo: 'It prepares a fifty-thousand-dollar wire transfer.',
     caption: [
       w('It'),
@@ -88,7 +88,7 @@ export const SHORT_SCENES: ShortScene[] = [
   },
   {
     id: 'reachable',
-    frames: 84,
+    frames: 120,
     vo: 'In milliseconds, a dangerous outcome becomes reachable.',
     caption: [
       w('A'),
@@ -100,7 +100,7 @@ export const SHORT_SCENES: ShortScene[] = [
   },
   {
     id: 'intervene',
-    frames: 78,
+    frames: 120,
     vo: 'Runtime Governance evaluates the action before it executes.',
     caption: [
       w('Runtime', 'accent'),
@@ -115,7 +115,7 @@ export const SHORT_SCENES: ShortScene[] = [
   },
   {
     id: 'block',
-    frames: 60,
+    frames: 120,
     vo: 'Blocked. The transfer never happens.',
     caption: [
       w('BLOCKED.', 'omega'),
@@ -127,7 +127,7 @@ export const SHORT_SCENES: ShortScene[] = [
   },
   {
     id: 'audit',
-    frames: 108,
+    frames: 120,
     vo: 'Every decision — logged, signed, and provable.',
     caption: [
       w('Every'),
@@ -139,7 +139,7 @@ export const SHORT_SCENES: ShortScene[] = [
   },
   {
     id: 'close',
-    frames: 102,
+    frames: 120,
     vo: 'Safety, enforced before execution. Resurrection Tech.',
     caption: [
       w('Safety,'),

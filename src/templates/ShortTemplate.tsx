@@ -9,9 +9,14 @@ import {
   useCurrentFrame,
   useVideoConfig,
 } from 'remotion';
-import {Background} from '../components/Background';
 import {COLORS, FONTS} from '../branding/theme';
 import {useFontsReady} from '../branding/useFontsReady';
+import {
+  AmbientBackground,
+  FilmGrain,
+  MoodWash,
+  Vignette,
+} from '../components/short/Ambience';
 import {KineticCaption} from '../components/short/KineticCaption';
 import {ShortChrome} from '../components/short/ShortChrome';
 import {AgentConsole} from '../components/short/AgentConsole';
@@ -57,44 +62,58 @@ const Visual: React.FC<{id: ShortSceneId}> = ({id}) => {
   }
 };
 
-/** One scene: background mood, a hero visual, a kinetic caption, fast entrance. */
+/**
+ * One 4s beat. Content cross-dissolves in/out over a continuous background and
+ * rides a slow camera push, so the piece reads as one living scene. Internal
+ * component motion is timed to fill the full window — no dead air.
+ */
 const Scene: React.FC<{scene: ShortScene; scale: number; biasY: number}> = ({
   scene,
   scale,
   biasY,
 }) => {
   const frame = useCurrentFrame();
-  const {fps} = useVideoConfig();
+  const {fps, durationInFrames} = useVideoConfig();
 
-  const entrance = spring({frame, fps, config: {damping: 200, mass: 0.5}});
-  const eOpacity = interpolate(entrance, [0, 1], [0, 1]);
-  const eY = interpolate(entrance, [0, 1], [40, 0]);
+  // cross-dissolve envelope
+  const enter = spring({frame, fps, config: {damping: 200, mass: 0.6}});
+  const outStart = durationInFrames - 16;
+  const out = interpolate(frame, [outStart, durationInFrames - 1], [0, 1], {
+    extrapolateLeft: 'clamp',
+    extrapolateRight: 'clamp',
+  });
+  const opacity = Math.min(enter, 1 - out);
+
+  // slow cinematic push-in + gentle settle/exit drift
+  const push = interpolate(frame, [0, durationInFrames], [1, 1.035]);
+  const enterScale = interpolate(enter, [0, 1], [0.955, 1]);
+  const yEnter = interpolate(enter, [0, 1], [40, 0]);
+  const yExit = interpolate(out, [0, 1], [0, -26]);
 
   const isHook = scene.id === 'hook';
   const isClose = scene.id === 'close';
   const captionSize = isHook ? 108 : isClose ? 96 : 84;
 
-  // impact flash on the BLOCK beat
   const flash =
     scene.id === 'block'
-      ? interpolate(frame, [2, 9, 34], [0, 0.5, 0], {
+      ? interpolate(frame, [28, 35, 64], [0, 0.5, 0], {
           extrapolateLeft: 'clamp',
           extrapolateRight: 'clamp',
         })
       : 0;
 
   return (
-    <AbsoluteFill>
-      <Background glow={GLOW[scene.id]} />
+    <AbsoluteFill style={{opacity}}>
+      <MoodWash color={GLOW[scene.id]} opacity={opacity} />
 
       <AbsoluteFill style={{justifyContent: 'center', alignItems: 'center'}}>
         <div
           style={{
-            transform: `translateY(${biasY}px) scale(${scale})`,
+            transform: `translateY(${biasY + yEnter + yExit}px) scale(${push * enterScale * scale})`,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            gap: isHook || isClose ? 40 : 64,
+            gap: isHook || isClose ? 44 : 66,
             width: 1080,
           }}
         >
@@ -103,9 +122,12 @@ const Scene: React.FC<{scene: ShortScene; scale: number; biasY: number}> = ({
               style={{
                 fontFamily: FONTS.mono,
                 fontSize: 30,
-                letterSpacing: '0.28em',
+                letterSpacing: '0.3em',
                 color: COLORS.omega,
-                opacity: eOpacity,
+                padding: '10px 22px',
+                borderRadius: 999,
+                border: `1px solid ${COLORS.omega}55`,
+                background: `${COLORS.omega}12`,
               }}
             >
               ⚠ REACTIVE SECURITY
@@ -113,22 +135,15 @@ const Scene: React.FC<{scene: ShortScene; scale: number; biasY: number}> = ({
           ) : null}
 
           {!isHook && !isClose ? (
-            <div
-              style={{
-                opacity: eOpacity,
-                transform: `translateY(${eY}px)`,
-                display: 'flex',
-                justifyContent: 'center',
-              }}
-            >
+            <div style={{display: 'flex', justifyContent: 'center'}}>
               <Visual id={scene.id} />
             </div>
           ) : null}
 
           <KineticCaption
             tokens={scene.caption}
-            startAt={isHook ? 2 : 8}
-            stagger={isHook ? 3 : 4}
+            startAt={isHook ? 4 : 10}
+            stagger={isHook ? 4 : 5}
             fontSize={captionSize}
           />
 
@@ -150,9 +165,10 @@ const Scene: React.FC<{scene: ShortScene; scale: number; biasY: number}> = ({
 };
 
 /**
- * Feed-native vertical/square short. Fast cuts (one Series.Sequence per scene),
- * constant motion, kinetic captions throughout, an optional voiceover slot, and
- * platform-safe chrome. `compact` tightens the layout for the 1:1 master.
+ * Feed-native vertical/square short. A continuous living backdrop with film
+ * grain and vignette; eight 4s beats that cross-dissolve with a camera push;
+ * kinetic captions throughout; an optional voiceover slot; platform-safe
+ * chrome. `compact` tightens the layout for the 1:1 master.
  */
 export const ShortTemplate: React.FC<{compact?: boolean}> = ({
   compact = false,
@@ -164,6 +180,8 @@ export const ShortTemplate: React.FC<{compact?: boolean}> = ({
 
   return (
     <AbsoluteFill style={{backgroundColor: COLORS.bg}}>
+      <AmbientBackground />
+
       <Series>
         {SHORT_SCENES.map((scene) => (
           <Series.Sequence key={scene.id} durationInFrames={scene.frames}>
@@ -172,6 +190,8 @@ export const ShortTemplate: React.FC<{compact?: boolean}> = ({
         ))}
       </Series>
 
+      <FilmGrain />
+      <Vignette />
       <ShortChrome />
 
       {VOICEOVER ? <Audio src={staticFile(VOICEOVER)} /> : null}
