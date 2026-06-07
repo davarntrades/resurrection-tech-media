@@ -7,6 +7,7 @@ import {SolutionScene} from '../scenes/SolutionScene';
 import {PillarsScene} from '../scenes/PillarsScene';
 import {OutroScene} from '../scenes/OutroScene';
 import {COLORS} from '../branding/theme';
+import {useFontsReady} from '../branding/useFontsReady';
 import type {ExplainerScript} from '../videos/runtime-governance-explainer/script';
 
 /**
@@ -17,6 +18,8 @@ import type {ExplainerScript} from '../videos/runtime-governance-explainer/scrip
 export const ExplainerTemplate: React.FC<{script: ExplainerScript}> = ({
   script,
 }) => {
+  useFontsReady();
+
   return (
     <AbsoluteFill style={{backgroundColor: COLORS.bg}}>
       <Series>

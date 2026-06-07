@@ -5,29 +5,32 @@
  * (`resurrection-tech-enterprise`, styles/design-system.css). Touch a value
  * here and every composition updates.
  */
-import {loadFont} from '@remotion/fonts';
 import {GEIST_MONO_WOFF2, GEIST_SANS_WOFF2} from './fonts';
 
-// Self-hosted Geist (variable woff2), embedded as base64 data URIs so the font
-// is resolved in-process — no static-file fetch. This keeps renders fast,
-// fully offline, and deterministic at any concurrency (a networked woff2 can
-// stall a Chrome tab and trip the font delayRender() timeout). The on-disk
-// copies live in public/branding/fonts; regenerate fonts.ts with
-// `node scripts/embed-fonts.mjs` after swapping them.
-// `format` must be explicit: @remotion/fonts derives it from the URL extension,
-// which a data: URI doesn't have.
-loadFont({
-  family: 'Geist',
-  url: GEIST_SANS_WOFF2,
-  format: 'woff2',
-  weight: '100 900',
-});
-loadFont({
-  family: 'Geist Mono',
-  url: GEIST_MONO_WOFF2,
-  format: 'woff2',
-  weight: '100 900',
-});
+// Register the embedded Geist faces with plain CSS @font-face using base64 data
+// URIs. Why not @remotion/fonts loadFont()? Its FontFace.load() gate registers a
+// delayRender() that, when a Chrome tab is recycled mid-render, re-fires on the
+// fresh page and can stall until the render-killing timeout. A CSS @font-face has
+// no network fetch (data URI) and no mandatory delayRender, so it can't fail a
+// render; `font-display: block` avoids any fallback-font flash. Determinism is
+// handled by the bounded useFontsReady() gate (see ExplainerTemplate).
+//
+// The on-disk copies live in public/branding/fonts; regenerate fonts.ts with
+// `node scripts/embed-fonts.mjs` after swapping them. Italic ℛ is synthesized
+// from the upright face (Geist ships no italic axis), so only normal faces are
+// declared.
+if (
+  typeof document !== 'undefined' &&
+  !document.getElementById('rt-brand-fonts')
+) {
+  const style = document.createElement('style');
+  style.id = 'rt-brand-fonts';
+  style.textContent = `
+@font-face{font-family:'Geist';font-style:normal;font-weight:100 900;font-display:block;src:url(${GEIST_SANS_WOFF2}) format('woff2');}
+@font-face{font-family:'Geist Mono';font-style:normal;font-weight:100 900;font-display:block;src:url(${GEIST_MONO_WOFF2}) format('woff2');}
+`;
+  document.head.appendChild(style);
+}
 
 /** Font families, ready to drop into a `fontFamily` style. */
 export const FONTS = {
