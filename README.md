@@ -58,8 +58,11 @@ Colors mirror the live site (`resurrection-tech-enterprise`).
 | Omega / risk    | `omega`                     | `#e5484d`                 |
 | OK / safe       | `ok`                        | `#3fb27f`                 |
 
-**Fonts:** Geist (sans) + Geist Mono (mono), loaded via
-[`@remotion/google-fonts`](https://www.remotion.dev/docs/google-fonts).
+**Fonts:** Geist (sans) + Geist Mono (mono), **self-hosted** as variable woff2
+in `public/branding/fonts/` (sourced from the `geist` npm package) and loaded
+via [`@remotion/fonts`](https://www.remotion.dev/docs/fonts-api/load-font) +
+`staticFile`. This keeps renders fast, offline, and deterministic — no Google
+Fonts network round-trips.
 **Video config:** 1920×1080 @ 30fps.
 
 ---

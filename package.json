@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@remotion/cli": "4.0.473",
-    "@remotion/google-fonts": "4.0.473",
+    "@remotion/fonts": "4.0.473",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "remotion": "4.0.473"
@@ -25,6 +25,7 @@
     "@types/react": "19.0.0",
     "@types/web": "0.0.166",
     "eslint": "9.19.0",
+    "geist": "^1.7.2",
     "prettier": "3.4.2",
     "typescript": "5.8.2"
   }

@@ -47,17 +47,17 @@ export const runtimeGovernanceScript: ExplainerScript = {
     heading: 'Three pillars of runtime governance',
     items: [
       {
-        glyph: '👁',
+        icon: 'monitor',
         title: 'Monitor',
         desc: 'Track every system state against its reachable set, live, at machine speed.',
       },
       {
-        glyph: '🛡',
+        icon: 'constrain',
         title: 'Constrain',
         desc: 'Intercept unsafe trajectories before they cross into the danger region Ω.',
       },
       {
-        glyph: '📜',
+        icon: 'audit',
         title: 'Audit',
         desc: 'Produce a provable, replayable record of every decision and intervention.',
       },

@@ -5,16 +5,27 @@
  * (`resurrection-tech-enterprise`, styles/design-system.css). Touch a value
  * here and every composition updates.
  */
-import {loadFont as loadGeist} from '@remotion/google-fonts/Geist';
-import {loadFont as loadGeistMono} from '@remotion/google-fonts/GeistMono';
+import {loadFont} from '@remotion/fonts';
+import {staticFile} from 'remotion';
 
-const geist = loadGeist();
-const geistMono = loadGeistMono();
+// Self-hosted Geist (variable woff2, sourced from the `geist` npm package and
+// copied into public/branding/fonts). Loading from staticFile keeps renders
+// fast, fully offline, and deterministic — no Google Fonts network round-trips.
+loadFont({
+  family: 'Geist',
+  url: staticFile('branding/fonts/Geist-Variable.woff2'),
+  weight: '100 900',
+});
+loadFont({
+  family: 'Geist Mono',
+  url: staticFile('branding/fonts/GeistMono-Variable.woff2'),
+  weight: '100 900',
+});
 
 /** Font families, ready to drop into a `fontFamily` style. */
 export const FONTS = {
-  sans: geist.fontFamily,
-  mono: geistMono.fontFamily,
+  sans: 'Geist, "Helvetica Neue", Arial, sans-serif',
+  mono: 'Geist Mono, ui-monospace, "SF Mono", Menlo, monospace',
 } as const;
 
 /** Brand palette — deep graphite surfaces, silver-white ink, electric-blue accent. */
