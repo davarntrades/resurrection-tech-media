@@ -6,19 +6,26 @@
  * here and every composition updates.
  */
 import {loadFont} from '@remotion/fonts';
-import {staticFile} from 'remotion';
+import {GEIST_MONO_WOFF2, GEIST_SANS_WOFF2} from './fonts';
 
-// Self-hosted Geist (variable woff2, sourced from the `geist` npm package and
-// copied into public/branding/fonts). Loading from staticFile keeps renders
-// fast, fully offline, and deterministic — no Google Fonts network round-trips.
+// Self-hosted Geist (variable woff2), embedded as base64 data URIs so the font
+// is resolved in-process — no static-file fetch. This keeps renders fast,
+// fully offline, and deterministic at any concurrency (a networked woff2 can
+// stall a Chrome tab and trip the font delayRender() timeout). The on-disk
+// copies live in public/branding/fonts; regenerate fonts.ts with
+// `node scripts/embed-fonts.mjs` after swapping them.
+// `format` must be explicit: @remotion/fonts derives it from the URL extension,
+// which a data: URI doesn't have.
 loadFont({
   family: 'Geist',
-  url: staticFile('branding/fonts/Geist-Variable.woff2'),
+  url: GEIST_SANS_WOFF2,
+  format: 'woff2',
   weight: '100 900',
 });
 loadFont({
   family: 'Geist Mono',
-  url: staticFile('branding/fonts/GeistMono-Variable.woff2'),
+  url: GEIST_MONO_WOFF2,
+  format: 'woff2',
   weight: '100 900',
 });
 
