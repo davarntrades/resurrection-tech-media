@@ -33,7 +33,7 @@ const CHECKS: {key: LocalCheck; label: string}[] = [
   {key: 'limits', label: 'within limits'},
 ];
 
-const Mark: React.FC<{kind: 'ok' | 'warn' | 'fail'; size: number}> = ({
+export const Mark: React.FC<{kind: 'ok' | 'warn' | 'fail'; size: number}> = ({
   kind,
   size,
 }) => {

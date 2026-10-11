@@ -130,6 +130,22 @@ Playfair Display (OFL), embedded like the Geist faces.
 
 ---
 
+## Governance flow — the reference architecture (9:16)
+
+The reference diagram told with the boards' pieces, top to bottom: an
+**autonomous AI proposer** (agent card) generates candidate actions →
+**Morrison Runtime Governance** (kernel card: **local admissibility** — is this
+proposed action permitted? · **global admissibility** — is the resulting
+trajectory permitted? → **ALLOW / BLOCK / ESCALATE** · decision-bound evidence
+recorded) → **mediated execution boundary** (only authorised actions reach the
+protected resource). Closes with the conceptual-architecture footnote and CTA.
+
+`GovernanceFlow-9x16` · `npm run render:governance-flow`. Copy and actions:
+[`src/videos/governance-flow/script.ts`](src/videos/governance-flow/script.ts);
+flow: [`src/templates/GovernanceFlow.tsx`](src/templates/GovernanceFlow.tsx).
+
+---
+
 ## Local + global safety — "Safe alone. Safe together."
 
 Same paper look, one autonomous proposer instead of five agents. Its five

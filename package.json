@@ -14,6 +14,7 @@
     "render:drug-discovery": "node scripts/render-board.mjs DrugDiscovery",
     "render:materials-discovery": "node scripts/render-board.mjs MaterialsDiscovery",
     "render:local-global": "node scripts/render-board.mjs LocalGlobalSafety",
+    "render:governance-flow": "remotion render GovernanceFlow-9x16 out/governance-flow-9x16.mp4",
     "typecheck": "tsc",
     "lint": "eslint src && tsc",
     "upgrade": "remotion upgrade"

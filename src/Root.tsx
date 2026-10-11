@@ -15,6 +15,7 @@ import {EveryAgentOneAuthority} from './videos/every-agent-one-authority';
 import {DrugDiscovery} from './videos/drug-discovery';
 import {MaterialsDiscovery} from './videos/materials-discovery';
 import {LocalGlobalSafety} from './videos/local-global-safety';
+import {GovernanceFlow} from './videos/governance-flow';
 import {
   DURATION as BOARD_DURATION,
   FPS as BOARD_FPS,
@@ -108,6 +109,16 @@ export const RemotionRoot: React.FC = () => {
           />
         )),
       )}
+
+      {/* Reference architecture as a board-style flow — vertical */}
+      <Composition
+        id="GovernanceFlow-9x16"
+        component={GovernanceFlow}
+        durationInFrames={BOARD_DURATION.map}
+        fps={BOARD_FPS}
+        width={1080}
+        height={1920}
+      />
     </>
   );
 };
