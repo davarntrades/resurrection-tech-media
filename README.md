@@ -86,6 +86,34 @@ All copy and timing live as data in
 
 ---
 
+## "Every agent. One authority."
+
+A 15s animated board on a light "paper" look: five agents propose, the
+**Morrison Kernel** decides (counters tick 15 allow · 5 escalate · 2 block, its
+border flashes each verdict), documents and verdict pills travel the metro
+lines, and each agent's verdict stamps in. Closes on the audit CTA.
+
+| Composition                    | Size      |
+| ------------------------------ | --------- |
+| `EveryAgentOneAuthority-16x9`  | 1920×1080 |
+| `EveryAgentOneAuthority-9x16`  | 1080×1920 |
+
+```bash
+npm run render:authority
+# → out/every-agent-one-authority-16x9.mp4 + -9x16.mp4
+```
+
+- Copy, agents, verdicts and the decision schedule:
+  [`src/videos/every-agent-one-authority/script.ts`](src/videos/every-agent-one-authority/script.ts)
+- Card positions and line routes per format:
+  [`layouts.ts`](src/videos/every-agent-one-authority/layouts.ts)
+- Building blocks (robots, kernel mark, cards, metro lines):
+  [`src/components/authority/`](src/components/authority)
+- Soundtrack: `public/audio/every-agent-one-authority.m4a`
+- Headline serif: Playfair Display (OFL), embedded like the Geist faces.
+
+---
+
 ## Project structure
 
 ```

@@ -11,6 +11,11 @@ import {
   SHORT_SCENES,
   totalShortDuration,
 } from './videos/runtime-governance-short/script';
+import {EveryAgentOneAuthority} from './videos/every-agent-one-authority';
+import {
+  DURATION as AUTHORITY_DURATION,
+  FPS as AUTHORITY_FPS,
+} from './videos/every-agent-one-authority/script';
 
 /**
  * Registers every <Composition>. Add a new video by importing its wrapper and
@@ -49,6 +54,26 @@ export const RemotionRoot: React.FC = () => {
         width={1080}
         height={1080}
         defaultProps={{compact: true}}
+      />
+
+      {/* "Every agent. One authority." — widescreen + vertical masters */}
+      <Composition
+        id="EveryAgentOneAuthority-16x9"
+        component={EveryAgentOneAuthority}
+        durationInFrames={AUTHORITY_DURATION}
+        fps={AUTHORITY_FPS}
+        width={1920}
+        height={1080}
+        defaultProps={{format: 'landscape' as const}}
+      />
+      <Composition
+        id="EveryAgentOneAuthority-9x16"
+        component={EveryAgentOneAuthority}
+        durationInFrames={AUTHORITY_DURATION}
+        fps={AUTHORITY_FPS}
+        width={1080}
+        height={1920}
+        defaultProps={{format: 'portrait' as const}}
       />
     </>
   );

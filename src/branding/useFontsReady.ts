@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react';
 import {continueRender, delayRender} from 'remotion';
 
 /**
- * Blocks a frame's capture until the embedded Geist fonts are ready — but with a
+ * Blocks a frame's capture until the embedded brand fonts are ready — but with a
  * hard 5s cap so a degraded or recycled Chrome render tab can never stall the
  * render on an uncleared delayRender(). The fonts are base64 data URIs, so on a
  * healthy tab this resolves in well under a second.
@@ -28,6 +28,7 @@ export const useFontsReady = (): void => {
       document.fonts.load("600 1em 'Geist'"),
       document.fonts.load("italic 600 1em 'Geist'"),
       document.fonts.load("500 1em 'Geist Mono'"),
+      document.fonts.load("800 1em 'Playfair Display'"),
     ])
       .then(() => document.fonts.ready)
       .then(finish)

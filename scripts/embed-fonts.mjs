@@ -11,12 +11,13 @@ const b64 = (rel) =>
 
 const sans = b64('public/branding/fonts/Geist-Variable.woff2');
 const mono = b64('public/branding/fonts/GeistMono-Variable.woff2');
+const serif = b64('public/branding/fonts/PlayfairDisplay-Variable.woff2');
 
 const out = `/**
- * Self-hosted Geist fonts, embedded as base64 woff2 data URIs.
+ * Self-hosted brand fonts (Geist, Geist Mono, Playfair Display), embedded as base64 woff2 data URIs.
  *
- * Generated from public/branding/fonts/*.woff2 (sourced from the \`geist\` npm
- * package) by scripts/embed-fonts.mjs — run that script if you swap the fonts.
+ * Generated from public/branding/fonts/*.woff2 (sourced from the \`geist\` and
+ * \`@fontsource-variable/playfair-display\` npm packages) by scripts/embed-fonts.mjs — run that script if you swap the fonts.
  *
  * Why data URIs and not staticFile()? During a concurrent video render, many
  * Chrome tabs hit the static-file server for the same woff2 at once and a
@@ -26,6 +27,7 @@ const out = `/**
  */
 export const GEIST_SANS_WOFF2 = "data:font/woff2;base64,${sans}";
 export const GEIST_MONO_WOFF2 = "data:font/woff2;base64,${mono}";
+export const PLAYFAIR_WOFF2 = "data:font/woff2;base64,${serif}";
 `;
 
 writeFileSync(join(root, 'src/branding/fonts.ts'), out);

@@ -9,12 +9,14 @@
     "preview": "remotion studio",
     "build": "remotion bundle",
     "render:explainer": "remotion render RuntimeGovernanceExplainer out/runtime-governance-explainer.mp4",
+    "render:authority": "remotion render EveryAgentOneAuthority-16x9 out/every-agent-one-authority-16x9.mp4 && remotion render EveryAgentOneAuthority-9x16 out/every-agent-one-authority-9x16.mp4",
     "typecheck": "tsc",
     "lint": "eslint src && tsc",
     "upgrade": "remotion upgrade"
   },
   "dependencies": {
     "@remotion/cli": "4.0.473",
+    "@remotion/paths": "4.0.473",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "remotion": "4.0.473"

@@ -5,7 +5,7 @@
  * (`resurrection-tech-enterprise`, styles/design-system.css). Touch a value
  * here and every composition updates.
  */
-import {GEIST_MONO_WOFF2, GEIST_SANS_WOFF2} from './fonts';
+import {GEIST_MONO_WOFF2, GEIST_SANS_WOFF2, PLAYFAIR_WOFF2} from './fonts';
 
 // Register the embedded Geist faces with plain CSS @font-face using base64 data
 // URIs. Why not @remotion/fonts loadFont()? Its FontFace.load() gate registers a
@@ -28,6 +28,7 @@ if (
   style.textContent = `
 @font-face{font-family:'Geist';font-style:normal;font-weight:100 900;font-display:block;src:url(${GEIST_SANS_WOFF2}) format('woff2');}
 @font-face{font-family:'Geist Mono';font-style:normal;font-weight:100 900;font-display:block;src:url(${GEIST_MONO_WOFF2}) format('woff2');}
+@font-face{font-family:'Playfair Display';font-style:normal;font-weight:400 900;font-display:block;src:url(${PLAYFAIR_WOFF2}) format('woff2');}
 `;
   document.head.appendChild(style);
 }
@@ -36,6 +37,8 @@ if (
 export const FONTS = {
   sans: 'Geist, "Helvetica Neue", Arial, sans-serif',
   mono: 'Geist Mono, ui-monospace, "SF Mono", Menlo, monospace',
+  /** Editorial display serif — headlines on the light "paper" look. */
+  serif: '"Playfair Display", Georgia, "Times New Roman", serif',
 } as const;
 
 /** Brand palette — deep graphite surfaces, silver-white ink, electric-blue accent. */
