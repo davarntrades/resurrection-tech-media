@@ -86,31 +86,47 @@ All copy and timing live as data in
 
 ---
 
-## "Every agent. One authority."
+## Authority boards
 
-A 15s animated board on a light "paper" look: five agents propose, the
-**Morrison Kernel** decides (counters tick 15 allow · 5 escalate · 2 block, its
-border flashes each verdict), documents and verdict pills travel the metro
-lines, and each agent's verdict stamps in. Closes on the audit CTA.
+An animated board on a light "paper" look: five agents propose, the
+**Morrison Kernel** decides (allow · escalate · block, its border flashing each
+verdict), documents and verdict pills travel the metro lines, and each agent's
+verdict stamps in. One template, any scenario, four masters each:
 
-| Composition                    | Size      |
-| ------------------------------ | --------- |
-| `EveryAgentOneAuthority-16x9`  | 1920×1080 |
-| `EveryAgentOneAuthority-9x16`  | 1080×1920 |
+| Master          | Size      | Length | What it is                                   |
+| --------------- | --------- | ------ | -------------------------------------------- |
+| `<Id>-16x9`     | 1920×1080 | 15s    | builds in, live tally, closes on the CTA, soundtrack |
+| `<Id>-9x16`     | 1080×1920 | 15s    | same, vertical                               |
+| `<Id>-Loop-16x9`| 1920×1080 | 12s    | seamless always-on board, silent             |
+| `<Id>-Loop-9x16`| 1080×1920 | 12s    | same, vertical                               |
 
-```bash
-npm run render:authority
-# → out/every-agent-one-authority-16x9.mp4 + -9x16.mp4
-```
+| Board                    | Scenario                                    | Render                          |
+| ------------------------ | ------------------------------------------- | ------------------------------- |
+| `EveryAgentOneAuthority` | general: research, code, finance, support, ops | `npm run render:authority`   |
+| `DrugDiscovery`          | targets, design, assay, analysis, partners  | `npm run render:drug-discovery` |
+| `MaterialsDiscovery`     | screen, simulate, synthesis, measure, compute | `npm run render:materials-discovery` |
 
-- Copy, agents, verdicts and the decision schedule:
-  [`src/videos/every-agent-one-authority/script.ts`](src/videos/every-agent-one-authority/script.ts)
-- Card positions and line routes per format:
-  [`layouts.ts`](src/videos/every-agent-one-authority/layouts.ts)
-- Building blocks (robots, kernel mark, cards, metro lines):
-  [`src/components/authority/`](src/components/authority)
-- Soundtrack: `public/audio/every-agent-one-authority.m4a`
-- Headline serif: Playfair Display (OFL), embedded like the Geist faces.
+Renders land in `out/<board>-<master>.mp4`.
+
+### Make a new board
+
+1. Copy `src/videos/drug-discovery/` to `src/videos/<your-board>/`.
+2. Edit `script.ts` — headline, subtitle, the four info cards, and five agents
+   (name, job, three tools, verdict, result). Long headlines and names shrink
+   to fit on their own. In map mode each agent's `doneAt` should sit on a
+   kernel decision with the same verdict (keep the example's values if you
+   keep its verdict order: allow, allow, escalate, allow, block).
+3. Rename the export in `index.tsx` and add it to `BOARDS` in
+   [`src/Root.tsx`](src/Root.tsx) — that registers all four masters.
+4. `node scripts/render-board.mjs <YourId>`.
+
+Where things live:
+[`src/templates/AuthorityBoard.tsx`](src/templates/AuthorityBoard.tsx) (the
+board and both modes) ·
+[`src/components/authority/`](src/components/authority) (cards, robots, kernel
+mark, metro lines, layouts, palette and decision schedules) ·
+`public/audio/every-agent-one-authority.m4a` (soundtrack) · headline serif is
+Playfair Display (OFL), embedded like the Geist faces.
 
 ---
 

@@ -18,16 +18,20 @@ export type Line = {
   points: Pt[];
   /** Station dots, as fractions along the route. */
   stations?: number[];
-  /** Ambient documents: first launch frame, gap between launches, travel time. */
+  /**
+   * Ambient documents: first launch frame, gap between launches, travel time.
+   * Keep `every` a divisor of 360 so the 12s loop masters repeat seamlessly.
+   */
   docs?: {start: number; every: number; travel: number};
-  /** Decision pills that ride this line (see DECISIONS in script.ts). */
+  /** Decision pills that ride this line (see DECISIONS in paper.ts). */
   pill?: PillKind;
 };
 
 export type Layout = {
   width: number;
   height: number;
-  title: {x: number; y: number; size: number};
+  /** Headline; long titles shrink so the widest line stays within maxWidth. */
+  title: {x: number; y: number; size: number; maxWidth: number};
   subtitle: {x: number; y: number; size: number};
   divider: {x: number; y: number; w: number};
   shared: Rect;
@@ -62,7 +66,7 @@ const C = {
 export const LANDSCAPE: Layout = {
   width: 1920,
   height: 1080,
-  title: {x: 52, y: 84, size: 86},
+  title: {x: 52, y: 84, size: 86, maxWidth: 760},
   subtitle: {x: 54, y: 296, size: 22},
   divider: {x: 54, y: 350, w: 488},
   shared: {x: 50, y: 402, w: 507, h: 113},
@@ -96,7 +100,7 @@ export const LANDSCAPE: Layout = {
         [920, 128],
       ],
       stations: [0.35, 0.62],
-      docs: {start: 70, every: 62, travel: 95},
+      docs: {start: 70, every: 60, travel: 95},
     },
     {
       color: C.salmon,
@@ -107,7 +111,7 @@ export const LANDSCAPE: Layout = {
         [1010, 240],
       ],
       stations: [0.5],
-      docs: {start: 95, every: 70, travel: 90},
+      docs: {start: 95, every: 72, travel: 90},
     },
     {
       color: C.teal,
@@ -147,7 +151,7 @@ export const LANDSCAPE: Layout = {
         [850, 380],
       ],
       stations: [0.55],
-      docs: {start: 100, every: 55, travel: 60},
+      docs: {start: 100, every: 60, travel: 60},
     },
     {
       color: C.blue,
@@ -170,7 +174,7 @@ export const LANDSCAPE: Layout = {
         [1068, 760],
       ],
       stations: [0.85],
-      docs: {start: 125, every: 75, travel: 110},
+      docs: {start: 125, every: 72, travel: 110},
     },
     {
       color: C.red,
@@ -193,7 +197,7 @@ export const LANDSCAPE: Layout = {
         [1700, 380],
       ],
       stations: [0.45, 0.75],
-      docs: {start: 90, every: 58, travel: 70},
+      docs: {start: 90, every: 60, travel: 70},
     },
     // kernel → tools (allowed actions execute)
     {
@@ -212,7 +216,7 @@ export const LANDSCAPE: Layout = {
 export const PORTRAIT: Layout = {
   width: 1080,
   height: 1920,
-  title: {x: 48, y: 86, size: 88},
+  title: {x: 48, y: 86, size: 88, maxWidth: 980},
   subtitle: {x: 50, y: 312, size: 22},
   divider: {x: 50, y: 364, w: 980},
   shared: {x: 16, y: 410, w: 330, h: 120},
@@ -253,7 +257,7 @@ export const PORTRAIT: Layout = {
         [540, 620],
       ],
       stations: [0.5],
-      docs: {start: 90, every: 55, travel: 45},
+      docs: {start: 90, every: 60, travel: 45},
     },
     {
       color: C.teal,
@@ -288,7 +292,7 @@ export const PORTRAIT: Layout = {
       ],
       stations: [0.2, 0.62, 0.9],
       pill: 'escalate',
-      docs: {start: 120, every: 85, travel: 120},
+      docs: {start: 120, every: 90, travel: 120},
     },
     {
       color: C.gold,
@@ -299,7 +303,7 @@ export const PORTRAIT: Layout = {
         [170, 920],
       ],
       stations: [0.5],
-      docs: {start: 100, every: 55, travel: 55},
+      docs: {start: 100, every: 60, travel: 55},
     },
     {
       color: C.blue,
@@ -321,7 +325,7 @@ export const PORTRAIT: Layout = {
         [905, 920],
       ],
       stations: [0.5],
-      docs: {start: 90, every: 58, travel: 55},
+      docs: {start: 90, every: 60, travel: 55},
     },
     {
       color: C.lime,
@@ -332,7 +336,7 @@ export const PORTRAIT: Layout = {
         [300, 1325],
       ],
       stations: [0.72],
-      docs: {start: 125, every: 75, travel: 100},
+      docs: {start: 125, every: 72, travel: 100},
     },
     {
       color: C.red,

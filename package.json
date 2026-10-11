@@ -9,7 +9,10 @@
     "preview": "remotion studio",
     "build": "remotion bundle",
     "render:explainer": "remotion render RuntimeGovernanceExplainer out/runtime-governance-explainer.mp4",
-    "render:authority": "remotion render EveryAgentOneAuthority-16x9 out/every-agent-one-authority-16x9.mp4 && remotion render EveryAgentOneAuthority-9x16 out/every-agent-one-authority-9x16.mp4",
+    "render:board": "node scripts/render-board.mjs",
+    "render:authority": "node scripts/render-board.mjs EveryAgentOneAuthority",
+    "render:drug-discovery": "node scripts/render-board.mjs DrugDiscovery",
+    "render:materials-discovery": "node scripts/render-board.mjs MaterialsDiscovery",
     "typecheck": "tsc",
     "lint": "eslint src && tsc",
     "upgrade": "remotion upgrade"

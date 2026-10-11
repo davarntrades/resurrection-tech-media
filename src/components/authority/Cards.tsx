@@ -1,13 +1,14 @@
 import React from 'react';
 import {interpolate, useCurrentFrame} from 'remotion';
 import {FONTS} from '../../branding/theme';
-import type {Rect} from '../../videos/every-agent-one-authority/layouts';
+import type {Rect} from './layouts';
 import {
+  AGENT_COLORS,
   PAPER,
   VERDICT_COLOR,
   type Agent,
   type Verdict,
-} from '../../videos/every-agent-one-authority/script';
+} from './paper';
 import {KernelMark} from './KernelMark';
 import {Robot} from './Robot';
 import {progress, rise} from './motion';
@@ -38,6 +39,13 @@ const heading = (size: number): React.CSSProperties => ({
   lineHeight: 1.05,
   whiteSpace: 'nowrap',
 });
+
+/**
+ * Largest heading size (≤ max) that keeps `text` inside `width`. Geist's bold
+ * caps average ~0.68em; this is an estimate, so it errs on the small side.
+ */
+const fitHeading = (text: string, width: number, max: number): number =>
+  Math.min(max, width / (text.length * 0.68));
 
 const body = (size: number): React.CSSProperties => ({
   fontFamily: FONTS.sans,
@@ -106,6 +114,8 @@ export const InfoCard: React.FC<{
 }> = ({rect, appearAt, title, lines, icon, accent, scale = 1}) => {
   const frame = useCurrentFrame();
   const s = scale;
+  const textWidth =
+    rect.w - (28 + (accent ? 34 : 28)) * s - (icon ? 46 * s : 0);
   return (
     <div style={{...place(rect), ...rise(progress(frame, appearAt))}}>
       <div
@@ -137,7 +147,9 @@ export const InfoCard: React.FC<{
         <div style={{display: 'flex', gap: 12 * s, alignItems: 'flex-start'}}>
           {icon === 'person' ? <PersonIcon size={34 * s} /> : null}
           <div>
-            <div style={heading(26 * s)}>{title}</div>
+            <div style={heading(fitHeading(title, textWidth, 26 * s))}>
+              {title}
+            </div>
             {lines.map((l) => (
               <div
                 key={l}
@@ -229,26 +241,28 @@ export const AgentCard: React.FC<{
   agent: Agent;
   appearAt: number;
   workStart: number;
-}> = ({rect, index, agent, appearAt, workStart}) => {
+  /** Loop mode: verdict always shown, tools re-run on a staggered 12s cycle. */
+  loop?: boolean;
+}> = ({rect, index, agent, appearAt, workStart, loop = false}) => {
   const frame = useCurrentFrame();
   const s = Math.min(1, rect.w / 400);
-  const done = frame >= agent.doneAt;
-  const reached = interpolate(
-    frame,
-    [workStart, agent.doneAt],
-    [0, agent.reach],
-    {
-      extrapolateLeft: 'clamp',
-      extrapolateRight: 'clamp',
-    },
-  );
-  const stamp = progress(frame, agent.doneAt, 14);
+  const color = AGENT_COLORS[index % AGENT_COLORS.length];
+  const done = loop || frame >= agent.doneAt;
+  const cycle = ((frame + index * 72) % 360) / 360;
+  const reached = loop
+    ? agent.reach * Math.min(1, cycle / 0.75)
+    : interpolate(frame, [workStart, agent.doneAt], [0, agent.reach], {
+        extrapolateLeft: 'clamp',
+        extrapolateRight: 'clamp',
+      });
+  const stamp = loop ? 1 : progress(frame, agent.doneAt, 14);
   const vColor = VERDICT_COLOR[agent.verdict];
   // a held / blocked agent's next tool pulses in the verdict colour
   const stuckPulse =
-    done && agent.verdict !== 'ALLOW'
-      ? 0.55 + 0.45 * Math.sin((frame - agent.doneAt) / 5)
+    done && agent.verdict !== 'ALLOW' && reached >= agent.reach
+      ? 0.55 + 0.45 * Math.sin((frame * 2 * Math.PI) / 30)
       : 0;
+  const nameSize = fitHeading(agent.name, rect.w - 60 * s - 124 * s, 39 * s);
 
   return (
     <div style={{...place(rect), ...rise(progress(frame, appearAt), 34)}}>
@@ -271,12 +285,12 @@ export const AgentCard: React.FC<{
             bottom: 18,
             width: 6,
             borderRadius: 3,
-            background: agent.color,
+            background: color,
           }}
         />
         <div style={{position: 'absolute', right: 12 * s, top: -14 * s}}>
           <Robot
-            color={agent.color}
+            color={color}
             size={112 * s}
             phase={index * 1.3}
             face={agent.face}
@@ -293,7 +307,17 @@ export const AgentCard: React.FC<{
         >
           {String(index + 1).padStart(2, '0')} / AGENT
         </div>
-        <div style={{...heading(39 * s), marginTop: 14 * s}}>{agent.name}</div>
+        <div
+          style={{
+            ...heading(nameSize),
+            marginTop: 14 * s,
+            height: 39 * s * 1.05,
+            display: 'flex',
+            alignItems: 'flex-end',
+          }}
+        >
+          {agent.name}
+        </div>
         <div style={{...body(21 * s), marginTop: 10 * s}}>{agent.job}</div>
 
         <div style={{display: 'flex', gap: 9 * s, marginTop: 22 * s}}>
@@ -332,7 +356,7 @@ export const AgentCard: React.FC<{
                     style={{
                       height: '100%',
                       width: `${(stuck ? 1 : fill) * 100}%`,
-                      background: stuck ? vColor : agent.color,
+                      background: stuck ? vColor : color,
                       opacity: stuck ? stuckPulse : 1,
                     }}
                   />

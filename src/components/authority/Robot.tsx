@@ -15,10 +15,12 @@ export const Robot: React.FC<{
 }> = ({color, size, phase = 0, face = 'eyes'}) => {
   const frame = useCurrentFrame();
   const id = svgId(useId());
-  const bob = Math.sin(frame / 18 + phase) * 2.2;
-  const cycle = (frame + Math.round(phase * 37)) % 96;
-  const blink = cycle > 90 ? 0.15 : 1;
-  const scan = 30 + 40 * (0.5 + 0.5 * Math.sin(frame / 9 + phase));
+  // periods (120 / 90 / 60 frames) divide the 360-frame loop masters
+  const bob = Math.sin((frame * 2 * Math.PI) / 120 + phase) * 2.2;
+  const cycle = (frame + Math.round(phase * 37)) % 90;
+  const blink = cycle > 85 ? 0.15 : 1;
+  const scan =
+    30 + 40 * (0.5 + 0.5 * Math.sin((frame * 2 * Math.PI) / 60 + phase));
 
   return (
     <svg

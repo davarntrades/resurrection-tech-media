@@ -10,7 +10,8 @@ export const KernelMark: React.FC<{size: number}> = ({size}) => {
   const ry = 17;
   const tilt = -8;
   const dots = ORBIT.map((color, i) => {
-    const a = frame * 0.035 + (i * Math.PI) / 2;
+    // one orbit per 180 frames, so loop masters repeat seamlessly
+    const a = (frame * 2 * Math.PI) / 180 + (i * Math.PI) / 2;
     return {
       color,
       x: Math.cos(a) * rx,

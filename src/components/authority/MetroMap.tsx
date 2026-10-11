@@ -2,11 +2,7 @@ import React, {useMemo} from 'react';
 import {useCurrentFrame} from 'remotion';
 import {getLength, getPointAtLength} from '@remotion/paths';
 import {FONTS} from '../../branding/theme';
-import type {
-  Line,
-  PillKind,
-  Pt,
-} from '../../videos/every-agent-one-authority/layouts';
+import type {Line, PillKind, Pt} from './layouts';
 import {progress} from './motion';
 
 /** Polyline → SVG path with rounded corners (radius capped per segment). */
@@ -86,11 +82,12 @@ const PillGlyph: React.FC<{kind: PillKind}> = ({kind}) => {
   );
 };
 
-const Route: React.FC<{line: Line; draw: number; pills: PillLaunch[]}> = ({
-  line,
-  draw,
-  pills,
-}) => {
+const Route: React.FC<{
+  line: Line;
+  draw: number;
+  pills: PillLaunch[];
+  preroll: number;
+}> = ({line, draw, pills, preroll}) => {
   const frame = useCurrentFrame();
   const d = useMemo(() => roundedPath(line.points, 46), [line.points]);
   const len = useMemo(() => getLength(d), [d]);
@@ -102,7 +99,8 @@ const Route: React.FC<{line: Line; draw: number; pills: PillLaunch[]}> = ({
 
   const travellers: React.ReactNode[] = [];
   if (line.docs) {
-    const {start, every, travel} = line.docs;
+    const {every, travel} = line.docs;
+    const start = line.docs.start - preroll;
     for (let k = 0; start + k * every <= frame; k++) {
       const t = (frame - start - k * every) / travel;
       if (t < 0 || t > 1) continue;
@@ -160,14 +158,19 @@ const Route: React.FC<{line: Line; draw: number; pills: PillLaunch[]}> = ({
   );
 };
 
-/** All routes, drawn on in sequence, with their traffic. Sits under the cards. */
+/**
+ * All routes, drawn on in sequence, with their traffic. Sits under the cards.
+ * `preroll` starts the document traffic that many frames early, so a loop
+ * master opens with the lines already busy.
+ */
 export const MetroMap: React.FC<{
   width: number;
   height: number;
   lines: Line[];
   drawWindow: readonly [number, number];
   pills: PillLaunch[];
-}> = ({width, height, lines, drawWindow, pills}) => {
+  preroll?: number;
+}> = ({width, height, lines, drawWindow, pills, preroll = 0}) => {
   const frame = useCurrentFrame();
   const [from, to] = drawWindow;
   const step = (to - from) / Math.max(1, lines.length);
@@ -180,6 +183,7 @@ export const MetroMap: React.FC<{
           line={line}
           draw={progress(frame, from + i * step * 0.5, (to - from) * 0.6)}
           pills={line.pill ? pills.filter((p) => p.kind === line.pill) : []}
+          preroll={preroll}
         />
       ))}
     </svg>

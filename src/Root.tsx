@@ -12,10 +12,45 @@ import {
   totalShortDuration,
 } from './videos/runtime-governance-short/script';
 import {EveryAgentOneAuthority} from './videos/every-agent-one-authority';
+import {DrugDiscovery} from './videos/drug-discovery';
+import {MaterialsDiscovery} from './videos/materials-discovery';
 import {
-  DURATION as AUTHORITY_DURATION,
-  FPS as AUTHORITY_FPS,
-} from './videos/every-agent-one-authority/script';
+  DURATION as BOARD_DURATION,
+  FPS as BOARD_FPS,
+  type BoardFormat,
+  type BoardMode,
+} from './components/authority/paper';
+
+/** Authority-board videos — each registers {16x9, 9x16} × {map, Loop}. */
+const BOARDS = [
+  {id: 'EveryAgentOneAuthority', component: EveryAgentOneAuthority},
+  {id: 'DrugDiscovery', component: DrugDiscovery},
+  {id: 'MaterialsDiscovery', component: MaterialsDiscovery},
+];
+const BOARD_MASTERS: {
+  suffix: string;
+  format: BoardFormat;
+  mode: BoardMode;
+  width: number;
+  height: number;
+}[] = [
+  {suffix: '16x9', format: 'landscape', mode: 'map', width: 1920, height: 1080},
+  {suffix: '9x16', format: 'portrait', mode: 'map', width: 1080, height: 1920},
+  {
+    suffix: 'Loop-16x9',
+    format: 'landscape',
+    mode: 'loop',
+    width: 1920,
+    height: 1080,
+  },
+  {
+    suffix: 'Loop-9x16',
+    format: 'portrait',
+    mode: 'loop',
+    width: 1080,
+    height: 1920,
+  },
+];
 
 /**
  * Registers every <Composition>. Add a new video by importing its wrapper and
@@ -56,25 +91,21 @@ export const RemotionRoot: React.FC = () => {
         defaultProps={{compact: true}}
       />
 
-      {/* "Every agent. One authority." — widescreen + vertical masters */}
-      <Composition
-        id="EveryAgentOneAuthority-16x9"
-        component={EveryAgentOneAuthority}
-        durationInFrames={AUTHORITY_DURATION}
-        fps={AUTHORITY_FPS}
-        width={1920}
-        height={1080}
-        defaultProps={{format: 'landscape' as const}}
-      />
-      <Composition
-        id="EveryAgentOneAuthority-9x16"
-        component={EveryAgentOneAuthority}
-        durationInFrames={AUTHORITY_DURATION}
-        fps={AUTHORITY_FPS}
-        width={1080}
-        height={1920}
-        defaultProps={{format: 'portrait' as const}}
-      />
+      {/* Authority boards — map (15s, CTA) and seamless loop (12s) masters */}
+      {BOARDS.flatMap(({id, component}) =>
+        BOARD_MASTERS.map((m) => (
+          <Composition
+            key={`${id}-${m.suffix}`}
+            id={`${id}-${m.suffix}`}
+            component={component}
+            durationInFrames={BOARD_DURATION[m.mode]}
+            fps={BOARD_FPS}
+            width={m.width}
+            height={m.height}
+            defaultProps={{format: m.format, mode: m.mode}}
+          />
+        )),
+      )}
     </>
   );
 };
