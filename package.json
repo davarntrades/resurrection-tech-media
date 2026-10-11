@@ -13,6 +13,7 @@
     "render:authority": "node scripts/render-board.mjs EveryAgentOneAuthority",
     "render:drug-discovery": "node scripts/render-board.mjs DrugDiscovery",
     "render:materials-discovery": "node scripts/render-board.mjs MaterialsDiscovery",
+    "render:local-global": "node scripts/render-board.mjs LocalGlobalSafety",
     "typecheck": "tsc",
     "lint": "eslint src && tsc",
     "upgrade": "remotion upgrade"

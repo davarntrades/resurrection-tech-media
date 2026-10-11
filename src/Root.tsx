@@ -14,6 +14,7 @@ import {
 import {EveryAgentOneAuthority} from './videos/every-agent-one-authority';
 import {DrugDiscovery} from './videos/drug-discovery';
 import {MaterialsDiscovery} from './videos/materials-discovery';
+import {LocalGlobalSafety} from './videos/local-global-safety';
 import {
   DURATION as BOARD_DURATION,
   FPS as BOARD_FPS,
@@ -21,11 +22,12 @@ import {
   type BoardMode,
 } from './components/authority/paper';
 
-/** Authority-board videos — each registers {16x9, 9x16} × {map, Loop}. */
+/** Board-style videos — each registers {16x9, 9x16} × {map, Loop}. */
 const BOARDS = [
   {id: 'EveryAgentOneAuthority', component: EveryAgentOneAuthority},
   {id: 'DrugDiscovery', component: DrugDiscovery},
   {id: 'MaterialsDiscovery', component: MaterialsDiscovery},
+  {id: 'LocalGlobalSafety', component: LocalGlobalSafety},
 ];
 const BOARD_MASTERS: {
   suffix: string;

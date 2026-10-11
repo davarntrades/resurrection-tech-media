@@ -13,7 +13,7 @@ import {KernelMark} from './KernelMark';
 import {Robot} from './Robot';
 import {progress, rise} from './motion';
 
-const place = (r: Rect): React.CSSProperties => ({
+export const place = (r: Rect): React.CSSProperties => ({
   position: 'absolute',
   left: r.x,
   top: r.y,
@@ -21,7 +21,7 @@ const place = (r: Rect): React.CSSProperties => ({
   height: r.h,
 });
 
-const cardSurface: React.CSSProperties = {
+export const cardSurface: React.CSSProperties = {
   background: PAPER.card,
   borderRadius: 26,
   border: `1px solid ${PAPER.cardBorder}`,
@@ -29,7 +29,7 @@ const cardSurface: React.CSSProperties = {
   boxSizing: 'border-box',
 };
 
-const heading = (size: number): React.CSSProperties => ({
+export const heading = (size: number): React.CSSProperties => ({
   fontFamily: FONTS.sans,
   fontWeight: 760,
   fontSize: size,
@@ -44,10 +44,10 @@ const heading = (size: number): React.CSSProperties => ({
  * Largest heading size (≤ max) that keeps `text` inside `width`. Geist's bold
  * caps average ~0.68em; this is an estimate, so it errs on the small side.
  */
-const fitHeading = (text: string, width: number, max: number): number =>
+export const fitHeading = (text: string, width: number, max: number): number =>
   Math.min(max, width / (text.length * 0.68));
 
-const body = (size: number): React.CSSProperties => ({
+export const body = (size: number): React.CSSProperties => ({
   fontFamily: FONTS.sans,
   fontWeight: 400,
   fontSize: size,

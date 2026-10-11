@@ -11,7 +11,14 @@
 export type Rect = {x: number; y: number; w: number; h: number};
 export type Pt = [number, number];
 
-export type PillKind = 'allow' | 'escalate' | 'block' | 'signed';
+/** Verdict pills, plus document tokens for proposals and evidence records. */
+export type PillKind =
+  | 'allow'
+  | 'escalate'
+  | 'block'
+  | 'signed'
+  | 'propose'
+  | 'evidence';
 
 export type Line = {
   color: string;
@@ -25,6 +32,8 @@ export type Line = {
   docs?: {start: number; every: number; travel: number};
   /** Decision pills that ride this line (see DECISIONS in paper.ts). */
   pill?: PillKind;
+  /** Frames a pill takes to ride the whole line (default 48). */
+  pillTravel?: number;
 };
 
 export type Layout = {

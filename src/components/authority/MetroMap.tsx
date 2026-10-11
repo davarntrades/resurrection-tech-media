@@ -25,11 +25,14 @@ const roundedPath = (pts: Pt[], radius: number): string => {
   return `${d} L ${lx} ${ly}`;
 };
 
-const PILL: Record<PillKind, {label: string; color: string}> = {
+// label === null → rendered as a document token rather than a text pill
+const PILL: Record<PillKind, {label: string | null; color: string}> = {
   allow: {label: 'ALLOW', color: '#1f9d4a'},
   escalate: {label: 'ESCALATE', color: '#e3a21a'},
   block: {label: 'BLOCK', color: '#d93a49'},
   signed: {label: 'SIGNED', color: '#14937e'},
+  propose: {label: null, color: '#2f6fe4'},
+  evidence: {label: null, color: '#3a3a3a'},
 };
 
 export type PillLaunch = {kind: PillKind; frame: number};
@@ -61,6 +64,13 @@ const DocGlyph: React.FC<{color: string}> = ({color}) => (
 
 const PillGlyph: React.FC<{kind: PillKind}> = ({kind}) => {
   const {label, color} = PILL[kind];
+  if (label === null) {
+    return (
+      <g transform="scale(1.35)">
+        <DocGlyph color={color} />
+      </g>
+    );
+  }
   const w = label.length * 9.4 + 18;
   return (
     <g>
@@ -117,7 +127,7 @@ const Route: React.FC<{
     }
   }
   pills.forEach((pill, k) => {
-    const t = (frame - pill.frame) / 48;
+    const t = (frame - pill.frame) / (line.pillTravel ?? 48);
     if (t < 0 || t > 1) return;
     const p = at(t);
     travellers.push(

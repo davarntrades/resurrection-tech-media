@@ -130,6 +130,31 @@ Playfair Display (OFL), embedded like the Geist faces.
 
 ---
 
+## Local + global safety — "Safe alone. Safe together."
+
+Same paper look, one autonomous proposer instead of five agents. Its five
+proposed steps run through **Morrison Runtime Governance**, which checks each
+one on its own (**local safety**) and as part of the whole path toward the
+forbidden set Ω (**global safety**). Only ALLOW crosses the **mediated
+execution boundary**; ESCALATE goes to a human and comes back signed; BLOCK
+stops at the wall. Every verdict lands a **decision-bound evidence** row.
+
+| # | Step | Local | Global | Verdict |
+| - | ---- | ----- | ------ | ------- |
+| 1 | query customers | ✓ | ✓ | ALLOW |
+| 2 | export to CSV | ✓ | ✓ | ALLOW |
+| 3 | drop prod table | ✗ prod write | ✓ | BLOCK (local) |
+| 4 | attach to email | ✓ | ! one step from Ω | ESCALATE |
+| 5 | send external | ✓ | ✗ reaches Ω | BLOCK (global) |
+
+`LocalGlobalSafety-{16x9, 9x16, Loop-16x9, Loop-9x16}` ·
+`npm run render:local-global`. Steps, Ω and copy:
+[`src/videos/local-global-safety/script.ts`](src/videos/local-global-safety/script.ts);
+the flow: [`src/templates/SafetyFlow.tsx`](src/templates/SafetyFlow.tsx) and
+[`src/components/safety/`](src/components/safety).
+
+---
+
 ## Project structure
 
 ```
